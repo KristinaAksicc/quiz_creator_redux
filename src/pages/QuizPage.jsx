@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getQuizQuestions } from "../redux/actions/actions";
 import { addQuestionToQuiz } from "../redux/actions/actions";
-import QuestionCards from "../components/questionCards";
-import AnswerButtons from "../components/answersButtons";
-import Navbar from "../components/nav";
-
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Card,
-  Grid,
-} from "@mui/material";
+import QuestionCards from "../components/QuestionCards";
+import AnswerButtons from "../components/AnswersButtons";
+import Navbar from "../components/Nav";
+import AddQuestionsModal from "../components/AddQuestionsModal";
+import { Card, Grid } from "@mui/material";
 
 export default function QuizPage() {
   const { allQuestions } = useSelector((state) => ({
@@ -96,54 +88,21 @@ export default function QuizPage() {
                   );
                 })}
               </div>
-              <div>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    handleClickOpen();
-                    addQuestion(question.id);
-                  }}
-                  color="secondary"
-                >
-                  Add to quiz
-                </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    Select quiz you want to add this question or create new one
-                  </DialogTitle>
-                  <DialogContent>
-                    {quizzes.map((quiz) => (
-                      <Button
-                        key={quiz.id}
-                        variant="text"
-                        onClick={() => {
-                          chooseQuiztoAdd(quiz.id);
-                          handleClose();
-                        }}
-                      >
-                        {quiz.title}
-                      </Button>
-                    ))}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose}>Close</Button>
-                    <Button
-                      onClick={() => {
-                        handleClose();
-                        handleNavigate();
-                      }}
-                      autoFocus
-                    >
-                      Create new quiz
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
+              <AddQuestionsModal
+                quizzes={quizzes}
+                openModal={() => {
+                  handleClickOpen();
+                  addQuestion(question.id);
+                }}
+                opener={open}
+                chooseQuiztoAdd={chooseQuiztoAdd}
+                handleClose={handleClose}
+                close={() => handleClose()}
+                create={() => {
+                  handleClose();
+                  handleNavigate();
+                }}
+              />
             </Card>
           );
         })}

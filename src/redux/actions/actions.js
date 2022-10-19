@@ -47,7 +47,6 @@ export function addQuestionToQuiz(payload) {
 }
 
 export function deleteQuestion(payload) {
-  console.log(payload);
   return {
     type: types.REMOVE_QUESTION_FROM_QUIZ,
     payload,

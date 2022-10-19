@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewQuiz, deleteQuestion } from "../redux/actions/actions";
-import NewButtonQuiz from "../components/createNewQuizButton";
-import Navbar from "../components/nav";
-import {
-  Box,
-  List,
-  ListItem,
-  IconButton,
-  Grid,
-  Typography,
-  Button,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import NewButtonQuiz from "../components/CreateNewQuizButton";
+import Navbar from "../components/Nav";
+import QuizTitles from "../components/QuizTitles";
+import { Button } from "@mui/material";
 
 export default function QuizListPage() {
   const { quizzes } = useSelector((state) => ({
@@ -71,42 +63,7 @@ export default function QuizListPage() {
         close={() => handleClose()}
       />
       {(data.length ? data : quizzes).map((quiz) => {
-        return (
-          <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
-            <Grid container spacing={2}>
-              <Grid item>
-                <Typography
-                  sx={{ mt: 4, mb: 2 }}
-                  variant="h6"
-                  component="div"
-                  key={quiz.id}
-                >
-                  {quiz.title}
-                </Typography>
-                <List>
-                  {quiz.questions.map((question) => {
-                    return (
-                      <ListItem>
-                        <Typography variant="h6" component="h2">
-                          {question}
-                        </Typography>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => {
-                            handleDelete(quiz.id, question);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </Grid>
-            </Grid>
-          </Box>
-        );
+        return <QuizTitles quiz={quiz} handleDelete={handleDelete} />;
       })}
       <Button
         variant="contained"
